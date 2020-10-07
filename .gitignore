@@ -32,3 +32,8 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# firebase
+src/services/firestore/firebaseConfig.ts
+src/services/firestore/serviceAccountKey.json
+src/services/firestore/serviceAccountKey.ts
