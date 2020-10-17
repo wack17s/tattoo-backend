@@ -1,11 +1,9 @@
 import firebaseAdmin from 'firebase-admin';
 
-import { serviceAccountKey } from './serviceAccountKey'
-
-export class FirestoreService {
-  public constructor() {
+export class Firestore {
+  public constructor(serviceAccountKey: firebaseAdmin.ServiceAccount) {
     firebaseAdmin.initializeApp({
-      credential: firebaseAdmin.credential.cert(serviceAccountKey as any)
+      credential: firebaseAdmin.credential.cert(serviceAccountKey)
     });
   }
 
@@ -67,6 +65,16 @@ export class FirestoreService {
     
     return doc.data() as T;
   }
-}
 
-export const firestoreService = new FirestoreService();
+  public addOne = async (collectionName: string, entryId: string, data: object): Promise<boolean> => {
+    const docRef = this.db.collection(collectionName).doc(entryId);
+
+    try {
+      await docRef.set(data, { merge: true });
+
+      return true;
+    } catch {
+      return false;
+    }
+  }
+}

@@ -1,5 +1,6 @@
 export interface CreateTattooerDto {
-  name: string;
-  age: number;
-  breed: string;
+  instagram: string;
+  city: string;
+  styles: string[];
+  about?: string;
 }

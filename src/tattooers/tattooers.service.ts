@@ -1,31 +1,30 @@
-import { Injectable } from '@nestjs/common';
-
-import { firestoreService } from '../services/firestore/firestore.service';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { Tattooer } from './interfaces/tattooer.interface';
+import { Firestore } from 'src/firestore/firestore';
 
 @Injectable()
 export class TattooersService {
-  // private readonly tattooers: Tattooer[] = [];
+  private firestore: Firestore;
 
-  // create(tattooer: Tattooer) {
-  //   this.tattooers.push(tattooer);
-  // }
+  public constructor(@Inject('FIRESTORE') firestore: Firestore) {
+    this.firestore = firestore;
+  }
 
   async findAll(): Promise<Tattooer[]> {
-    const tattooers = await firestoreService.getAll<Tattooer>('tattooers');
+    const tattooers = await this.firestore.getAll<Tattooer>('tattooers');
 
     return tattooers;
   }
 
   async getOne(tattooerId: string): Promise<Tattooer> {
-    const tattooer = await firestoreService.getOne<Tattooer>('tattooers', tattooerId);
+    const tattooer = await this.firestore.getOne<Tattooer>('tattooers', tattooerId);
 
     return tattooer;
   }
 
   async findQuery(queries: ({ key: string, value: string } | { array: string, value: string[] })[]): Promise<Tattooer[]> {
-    const tattooers = await firestoreService.getQuery<Tattooer>('tattooers', queries);
+    const tattooers = await this.firestore.getQuery<Tattooer>('tattooers', queries);
 
     return tattooers;
   }
