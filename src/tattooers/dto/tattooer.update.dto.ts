@@ -1,5 +1,10 @@
 export interface UpdateTattooerDto {
-  name: string;
-  age: number;
-  breed: string;
+  instagram: string; // index // id
+
+  city?: string;
+  styles?: string[];
+  about?: string;
+
+  aboutRaw?: string;
+  postIds?: string[];
 }

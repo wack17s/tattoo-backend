@@ -14,10 +14,10 @@ export class Firestore {
   public getAll = async <T>(collectionName: string): Promise<T[]> => {
     const snapshot = await this.db.collection(collectionName).get();
 
-    const res = [];
+    const res: T[] = [];
 
     snapshot.forEach(item => {
-      res.push(item.data());
+      res.push(item.data() as T);
     })
 
     return res;
@@ -45,10 +45,10 @@ export class Firestore {
       return [];
     }  
 
-    const res = [];
+    const res: T[] = [];
 
     snapshot.forEach(item => {
-      res.push(item.data());
+      res.push(item.data() as T);
     })
 
     return res;
@@ -70,10 +70,12 @@ export class Firestore {
     const docRef = this.db.collection(collectionName).doc(entryId);
 
     try {
-      await docRef.set(data, { merge: true });
+      await docRef.set(JSON.parse(JSON.stringify(data)), { merge: true });
 
       return true;
-    } catch {
+    } catch (error) {
+      console.log('[FIRESTORE addOne error]', error)
+      
       return false;
     }
   }

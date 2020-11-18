@@ -1,7 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 
 import { TattooersService } from './tattooers.service';
-import { CreateTattooerDto, UpdateTattooerDto, QueryParams } from './dto';
+import { QueryParams } from './dto/query-params.dto';
+import { UpdateTattooerDto } from './dto/tattooer.update.dto';
 
 @Controller('tattooers')
 export class TattooersController {
@@ -9,7 +10,7 @@ export class TattooersController {
 
   @Get()
   async findAll(@Query() query: QueryParams) {
-    let queries = [];
+    let queries: any = [];
 
     if (query.city) {
       queries.push({ key: 'city', value: query.city });
@@ -48,8 +49,11 @@ export class TattooersController {
   }
 
   @Post()
-  create(@Body() createTattooerDto: CreateTattooerDto) {
-    return 'This action adds a new tattooer';
+  async create(@Body() createTattooerDto: UpdateTattooerDto) {
+    console.log('createTattooerDto', createTattooerDto)
+    const tattooer = await this.tattooersService.createOne(createTattooerDto);
+
+    return JSON.stringify(tattooer);
   }
 
   @Put(':id')

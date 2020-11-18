@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Module, HttpModule } from '@nestjs/common';
 
-import { instagramFactory } from './instagram.provider';
+import { InstagramService } from './instagram.service';
 
 @Module({
-  providers: [instagramFactory],
-  exports: [instagramFactory]
+  imports: [HttpModule],
+  providers: [InstagramService],
+  exports: [InstagramService]
 })
 export class InstagramModule {}

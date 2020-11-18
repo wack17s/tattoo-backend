@@ -1,4 +1,4 @@
-import { serviceAccountKey } from './serviceAccountKey';
+import { config } from '../../config';
 
 import { Firestore } from './firestore';
 
@@ -6,9 +6,9 @@ export const firestoreFactory = {
   provide: 'FIRESTORE',
   useFactory: () => {
     return new Firestore({
-      privateKey: serviceAccountKey.private_key,
-      projectId: serviceAccountKey.project_id,
-      clientEmail: serviceAccountKey.client_email
+      privateKey: config.googleServiceAccountKey.private_key,
+      projectId: config.googleServiceAccountKey.project_id,
+      clientEmail: config.googleServiceAccountKey.client_email
     });
   },
 };

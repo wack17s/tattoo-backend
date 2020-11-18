@@ -1,13 +1,16 @@
 export interface Tattooer {
   instagram: string;
-  city: string;
-  styles: string[];
-  about?: string;
-  approved?: boolean;
-  instagram_posts?: string[];
+  approved: boolean;
 
-  instagram_data?: {
-    id: string;
-    token: string;
-  }
+  city?: string;
+  postURIs?: string[];
+  styles?: string[];
+
+  about?: string;
+  aboutRaw?: string;
+
+  // instagram_data?: {
+  //   id: string;
+  //   token: string;
+  // }
 }

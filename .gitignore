@@ -38,3 +38,8 @@ src/firestore/firebaseConfig.ts
 src/firestore/serviceAccountKey.json
 src/firestore/serviceAccountKey.ts
 src/instagram/instagramConfig.ts
+
+config.ts
+
+admin/build
+admin/node_modules
