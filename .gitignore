@@ -33,13 +33,10 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-# firebase
-src/firestore/firebaseConfig.ts
-src/firestore/serviceAccountKey.json
-src/firestore/serviceAccountKey.ts
-src/instagram/instagramConfig.ts
-
-config.ts
+.env
+ormconfig.json
 
 admin/build
 admin/node_modules
+
+postgres
