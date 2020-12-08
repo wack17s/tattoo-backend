@@ -7,7 +7,8 @@ import { BaseEntity } from './base.entity';
 export class Style extends BaseEntity {
   @PrimaryColumn({
     type: "enum",
-    enum: StyleName
+    enum: StyleName,
+    unique: true
   })
   public name: StyleName;
 

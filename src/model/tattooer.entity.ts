@@ -8,7 +8,7 @@ import { BaseEntity } from './base.entity';
 @Entity({ name: 'tattooer' })
 @Index(["instagram"], { unique: true })
 export class Tattooer extends BaseEntity {
-  @PrimaryColumn({ type: 'varchar' })
+  @PrimaryColumn({ type: 'varchar', unique: true })
   public instagram: string;
 
   @Column({ type: 'boolean', default: false })

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CityName } from 'src/city/city.types';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 
 import { Tattooer } from '../model/tattooer.entity';
 import { InstagramService } from '../instagram/instagram.service';
@@ -11,16 +11,24 @@ import { CreateTattooerDto } from './dto/tattooer.create.dto';
 
 @Injectable()
 export class TattooerService {
-  constructor(@InjectRepository(Tattooer) private readonly tattooerModel: Repository<Tattooer>, private instagramService: InstagramService) {
-    // dirtyTatts.tattooers.forEach(async item => {
-    //   this.createOne(item)
-    // })
+  constructor(
+    @InjectRepository(Tattooer) private readonly tattooerModel: Repository<Tattooer>,
+    private instagramService: InstagramService
+  ) {}
+
+  public async getList(params?: FindManyOptions) {
+    return (await this.tattooerModel.find(params));
   }
 
-  public async getAll() {
-    return (await this.tattooerModel.find()).length;
+  public async getOne(id: string) {
+    return await this.tattooerModel.findOne({ id });
   }
 
+  // public async getMany(instagrams: string[]) {
+  //   return await this.tattooerModel.findByIds(instagrams);
+  // }
+
+  // update
   public async createOne(createTattooerDto: CreateTattooerDto) {
     const oldTattooer = await this.tattooerModel.findOne({  where: { instagram: createTattooerDto.instagram }});
 
@@ -93,4 +101,21 @@ export class TattooerService {
       return createdTattooer;
     }
   }
+
+  // public async updateMany(createTattooerDtos: CreateTattooerDto[]) {
+  //   return await Promise.all(createTattooerDtos.map(item => this.createOne(item)));
+  // }
+
+  public async deleteOne(instagram: string) {
+    return await this.tattooerModel.delete({ instagram });
+  }
 }
+
+// getList	GET http://my.api.url/posts?_sort=title&_order=ASC&_start=0&_end=24&title=bar
+// getOne	GET http://my.api.url/posts/123
+// getMany	GET http://my.api.url/posts/123, GET http://my.api.url/posts/456, GET http://my.api.url/posts/789
+// getManyReference	GET http://my.api.url/posts?author_id=345
+// create	POST http://my.api.url/posts/123
+// update	PUT http://my.api.url/posts/123
+// updateMany	PUT http://my.api.url/posts/123, PUT http://my.api.url/posts/456, PUT http://my.api.url/posts/789
+// delete	DELETE http://my.api.url/posts/123

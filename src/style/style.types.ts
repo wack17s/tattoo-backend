@@ -14,4 +14,5 @@ export enum StyleName {
   BLACK_GREY = 'black grey',
   TRASH_POLKA = 'trash polka',
   COLOR = 'color',
+  TEST = 'test'
 }

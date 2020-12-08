@@ -38,7 +38,7 @@ class ConfigService {
       port: parseInt(this.getValue('POSTGRES_PORT')),
       username: this.getValue('POSTGRES_USER'),
       password: this.getValue('POSTGRES_PASSWORD'),
-      database: this.getValue('POSTGRES_DATABASE'),
+      database: this.getValue('POSTGRES_DB'),
 
       entities: [`${__dirname}/../**/*.entity.{ts,js}`],
 
@@ -57,7 +57,7 @@ class ConfigService {
 
 function getMigrationDirectory() {
 	const directory = process.env.NODE_ENV === 'migration' ? 'src' : `${__dirname}`;
-	return `${directory}/migrations/**/*{.ts,.js}`;
+	return `${directory}/../migration/*{.ts,.js}`;
 }
 
 const configService = new ConfigService(process.env)
@@ -66,7 +66,7 @@ const configService = new ConfigService(process.env)
     'POSTGRES_PORT',
     'POSTGRES_USER',
     'POSTGRES_PASSWORD',
-    'POSTGRES_DATABASE'
+    'POSTGRES_DB'
   ]);
 
 export { configService };

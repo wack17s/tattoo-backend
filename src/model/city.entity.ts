@@ -7,7 +7,8 @@ import { BaseEntity } from './base.entity';
 export class City extends BaseEntity {
   @PrimaryColumn({
     type: "enum",
-    enum: CityName
+    enum: CityName,
+    unique: true
   })
   public name: CityName;
 
