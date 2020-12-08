@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
 import { Tattooer } from '../model/tattooer.entity';
 import { InstagramModule } from '../instagram/instagram.module';
 

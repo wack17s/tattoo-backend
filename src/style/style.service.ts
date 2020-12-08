@@ -14,8 +14,8 @@ export class StyleService {
     return (await this.styleModel.find(params));
   }
 
-  public async getOne(name: CreateStyleDto['name']) {
-    return await this.styleModel.findOne({ name });
+  public async getOne(id: string) {
+    return await this.styleModel.findOne({ id });
   }
 
   public async createOne(createStyleDto: CreateStyleDto) {
@@ -30,7 +30,15 @@ export class StyleService {
     }
   }
 
-  public async deleteOne(name: CreateStyleDto['name']) {
-    return await this.styleModel.delete({ name });
+  public async updateOne(id: string, createStyleDto: CreateStyleDto) {
+    try {
+      await this.styleModel.update({ id }, { ...createStyleDto });
+    } catch (error) {
+      console.log('StyleService updateOne: ', error);
+    }
+  }
+
+  public async deleteOne(id: string) {
+    return await this.styleModel.delete({ id });
   }
 }

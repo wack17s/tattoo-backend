@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CityName } from 'src/city/city.types';
 import { FindManyOptions, Repository } from 'typeorm';
 
 import { Tattooer } from '../model/tattooer.entity';
 import { InstagramService } from '../instagram/instagram.service';
-import { StyleName } from '../style/style.types';
 
-import { CreateTattooerDto } from './dto/tattooer.create.dto';
+import { ICreateTattooer } from './tattooer.types';
 
 @Injectable()
 export class TattooerService {
@@ -24,26 +22,11 @@ export class TattooerService {
     return await this.tattooerModel.findOne({ id });
   }
 
-  // public async getMany(instagrams: string[]) {
-  //   return await this.tattooerModel.findByIds(instagrams);
-  // }
-
-  // update
-  public async createOne(createTattooerDto: CreateTattooerDto) {
-    const oldTattooer = await this.tattooerModel.findOne({  where: { instagram: createTattooerDto.instagram }});
-
+  public async createOne(createTattooerDto: ICreateTattooer) {
     const {
-      instagram,
-      city,
-      styles,
-      about,
-      aboutRaw,
-      profilePic,
       postIds,
       posts,
-      postsCount,
-      followersCount,
-      followingCount,
+      ...createTattooer
     } = createTattooerDto;
 
     let newPosts = []
@@ -65,49 +48,54 @@ export class TattooerService {
       newPosts = posts.filter(item => !!item);
     }
 
-    if (oldTattooer) {
-      const updatedTattooer = this.tattooerModel.create({
-        instagram,
-        about,
-        aboutRaw,
-        profilePic,
-        postsCount,
-        followersCount,
-        followingCount,
-        posts: posts || newPosts,
-        city: CityName[city] || undefined,
-        styles: styles && styles.length ? styles.map(style => StyleName[style] || undefined).filter(item => !!item) : undefined,
-      });
-  
-      await this.tattooerModel.update({ id: oldTattooer.id }, updatedTattooer);
-  
-      return updatedTattooer;
-    } else {
-      const createdTattooer = this.tattooerModel.create({
-        instagram,
-        about,
-        aboutRaw,
-        profilePic,
-        postsCount,
-        followersCount,
-        followingCount,
-        posts: posts || newPosts,
-        city: CityName[city] || undefined,
-        styles: styles && styles.length ? styles.map(style => StyleName[style] || undefined).filter(item => !!item) : undefined,
-      });
-  
-      await this.tattooerModel.save(createdTattooer);
-  
-      return createdTattooer;
-    }
+    const createdTattooer = this.tattooerModel.create({
+      ...createTattooer,
+      posts: posts || newPosts,
+    });
+
+    return (await this.tattooerModel.save(createdTattooer));
   }
 
-  // public async updateMany(createTattooerDtos: CreateTattooerDto[]) {
-  //   return await Promise.all(createTattooerDtos.map(item => this.createOne(item)));
-  // }
+  public async updateOne(id: string, createTattooerDto: ICreateTattooer) {
+    const oldTattooer = await this.tattooerModel.findOne({  where: { id }});
 
-  public async deleteOne(instagram: string) {
-    return await this.tattooerModel.delete({ instagram });
+    const {
+      postIds,
+      posts,
+      ...createTattooer
+    } = createTattooerDto;
+
+    let newPosts = []
+
+    if (postIds && postIds.length) {
+      const posts = await Promise.all(postIds.map(async postId => {
+        const instagramPost = await this.instagramService.getPost(postId);
+
+        if (instagramPost && instagramPost.thumbnail_url) {
+          return {
+            id: postId,
+            uri: instagramPost.thumbnail_url
+          };
+        }
+
+        return undefined;
+      }));
+
+      newPosts = posts.filter(item => !!item);
+    }
+
+    const updatedTattooer = this.tattooerModel.create({
+      ...createTattooer,
+      posts: posts || newPosts,
+    });
+
+    await this.tattooerModel.update({ id: oldTattooer.id, instagram: updatedTattooer.instagram }, updatedTattooer);
+
+    return { id, ...updatedTattooer };
+  }
+
+  public async deleteOne(id: string) {
+    return await this.tattooerModel.delete({ id });
   }
 }
 

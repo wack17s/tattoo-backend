@@ -1,5 +1,4 @@
 import { Controller, Get, Post, Body, Put, Delete, Param, Header, Query, Res } from '@nestjs/common';
-import { isEmpty } from 'lodash';
 
 import { CreateCityDto } from './dto/create.city.dto';
 import { CityService } from './city.service';
@@ -11,23 +10,18 @@ export class CityController {
   @Get()
   @Header('Access-Control-Expose-Headers', 'X-Total-Count')
   public async getList(@Query() params: { _end?: string, _order?: 'ASC' | 'DESC', _sort?: string, _start?: string }, @Res() res: any) {
-    const { _end, _order, _sort, _start } = params;
+    // const { _end, _order, _sort, _start } = params;
 
     const allStyles = await this.cityService.getList();
 
     res.set('X-Total-Count', allStyles.length);
 
-    if (!params || isEmpty(params)) {
-      return res.send(JSON.stringify(allStyles));
-    }
+    return res.send(JSON.stringify(allStyles));
+  }
 
-    const cities = await this.cityService.getList({
-      order: _sort && _order ? { [_sort]: _order } : undefined,
-      skip: _start ? Number(_start) : undefined,
-      take: _end && _start ? Number(_end) - Number(_start) : undefined
-    });
-
-    return res.send(JSON.stringify(cities));
+  @Get(':id')
+  public async findOne(@Param('id') id: string) {
+    return (await this.cityService.getOne(id));
   }
 
   @Post()
@@ -37,16 +31,16 @@ export class CityController {
     return JSON.stringify(city);
   }
 
-  @Put(':name')
-  public async updateOne(@Param('name') name: CreateCityDto['name'], @Body() createCityDto: CreateCityDto) {
-    const city = await this.cityService.createOne({ name, ...createCityDto });
+  @Put(':id')
+  public async updateOne(@Param('id') id: string, @Body() createCityDto: CreateCityDto) {
+    const city = await this.cityService.updateOne(id, { ...createCityDto });
 
     return JSON.stringify(city);
   }
 
-  @Delete(':name')
-  public async deleteOne(@Param('name') name: CreateCityDto['name']) {
-    const city = await this.cityService.deleteOne(name);
+  @Delete(':id')
+  public async deleteOne(@Param('id') id: string) {
+    const city = await this.cityService.deleteOne(id);
 
     return JSON.stringify(city);
   }

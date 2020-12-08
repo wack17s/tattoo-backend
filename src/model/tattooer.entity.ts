@@ -1,8 +1,5 @@
 import { Entity, Column, PrimaryColumn, Index } from 'typeorm';
 
-import { CityName } from './../city/city.types';
-import { StyleName } from './../style/style.types';
-
 import { BaseEntity } from './base.entity';
 
 @Entity({ name: 'tattooer' })
@@ -17,11 +14,11 @@ export class Tattooer extends BaseEntity {
   @Column({ type: 'jsonb', default: [] })
   public posts: { id: string; uri: string; }[];
 
-  @Column({ type: 'enum', enum: CityName, nullable: true })
-  public city?: CityName;
+  @Column({ type: 'varchar', nullable: true })
+  public city_id?: string;
 
-  @Column({ type: 'enum', enum: StyleName, array: true, nullable: true })
-  public styles?: StyleName[];
+  @Column({ type: 'varchar', array: true, nullable: true })
+  public style_ids?: string[];
 
   @Column({ type: 'varchar', nullable: true })
   public profilePic?: string;

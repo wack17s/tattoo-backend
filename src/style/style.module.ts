@@ -10,6 +10,6 @@ import { StyleService } from './style.service';
   providers: [StyleService],
   controllers: [StyleController],
   imports: [TypeOrmModule.forFeature([Style])],
-  exports: []
+  exports: [StyleService]
 })
 export class StyleModule {}

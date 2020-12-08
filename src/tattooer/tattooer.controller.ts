@@ -35,23 +35,25 @@ export class TattooerController {
     return (await this.tattooerService.getOne(id));
   }
 
-  @Post()
-  public async createOne(@Body() createTattooerDto: CreateTattooerDto) {
-    const tattooer = await this.tattooerService.createOne(createTattooerDto);
+  @Post(':id')
+  public async createOne(@Param('id') id: string, @Body() createTattooerDto: CreateTattooerDto) {
+    const tattooer = await this.tattooerService.createOne({ ...createTattooerDto });
 
     return JSON.stringify(tattooer);
   }
 
   @Put(':id')
-  public async updateOne(@Param(':id') id: string, @Body() createTattooerDto: CreateTattooerDto) {
-    const tattooer = await this.tattooerService.createOne(createTattooerDto);
+  public async updateOne(@Param('id') id: string, @Body() createTattooerDto: CreateTattooerDto) {
+    const tattooer = await this.tattooerService.updateOne(id, { ...createTattooerDto });
+
+    console.warn('wtf', tattooer)
 
     return JSON.stringify(tattooer);
   }
 
-  @Delete(':instagram')
-  public async deleteOne(@Param(':instagram') instagram: string) {
-    const tattooer = await this.tattooerService.deleteOne(instagram);
+  @Delete(':id')
+  public async deleteOne(@Param('id') id: string) {
+    const tattooer = await this.tattooerService.deleteOne(id);
 
     return JSON.stringify(tattooer);
   }

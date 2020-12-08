@@ -1,5 +1,4 @@
 import { Controller, Get, Post, Body, Put, Delete, Param, Header, Query, Res } from '@nestjs/common';
-import { isEmpty } from 'lodash';
 
 import { CreateStyleDto } from './dto/create.style.dto';
 import { StyleService } from './style.service';
@@ -11,29 +10,19 @@ export class StyleController {
   @Get()
   @Header('Access-Control-Expose-Headers', 'X-Total-Count')
   public async getList(@Query() params: { _end?: string, _order?: 'ASC' | 'DESC', _sort?: string, _start?: string }, @Res() res: any) {
-    const { _end, _order, _sort, _start } = params;
+    // const { _end, _order, _sort, _start } = params;
 
     const allStyles = await this.styleService.getList();
 
     res.set('X-Total-Count', allStyles.length);
 
-    if (!params || isEmpty(params)) {
-      return res.send(JSON.stringify(allStyles));
-    }
-
-    const styles = await this.styleService.getList({
-      order: _sort && _order ? { [_sort]: _order } : undefined,
-      skip: _start ? Number(_start) : undefined,
-      take: _end && _start ? Number(_end) - Number(_start) : undefined
-    });
-
-    return res.send(JSON.stringify(styles));
+    return res.send(JSON.stringify(allStyles));
   }
 
-  // @Get(':id')
-  // public async findOne(@Param('id') id: string) {
-  //   return (await this.tattooerService.getOne(id));
-  // }
+  @Get(':id')
+  public async findOne(@Param('id') id: string) {
+    return (await this.styleService.getOne(id));
+  }
 
   @Post()
   public async createOne(@Body() createStyleDto: CreateStyleDto) {
@@ -42,16 +31,16 @@ export class StyleController {
     return JSON.stringify(style);
   }
 
-  @Put(':name')
-  public async updateOne(@Param('name') name: CreateStyleDto['name'], @Body() createStyleDto: CreateStyleDto) {
-    const style = await this.styleService.createOne({ name, ...createStyleDto });
+  @Put(':id')
+  public async updateOne(@Param('id') id: string, @Body() createStyleDto: CreateStyleDto) {
+    const style = await this.styleService.updateOne(id, { ...createStyleDto });
 
     return JSON.stringify(style);
   }
 
-  @Delete(':name')
-  public async deleteOne(@Param('name') name: CreateStyleDto['name']) {
-    const style = await this.styleService.deleteOne(name);
+  @Delete(':id')
+  public async deleteOne(@Param('id') id: string) {
+    const style = await this.styleService.deleteOne(id);
 
     return JSON.stringify(style);
   }

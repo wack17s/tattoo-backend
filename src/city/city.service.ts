@@ -14,8 +14,8 @@ export class CityService {
     return (await this.cityModel.find(params));
   }
 
-  public async getOne(name: CreateCityDto['name']) {
-    return await this.cityModel.findOne({ name });
+  public async getOne(id: string) {
+    return await this.cityModel.findOne({ id });
   }
 
   public async createOne(createCityDto: CreateCityDto) {
@@ -30,7 +30,15 @@ export class CityService {
     }
   }
 
-  public async deleteOne(name: CreateCityDto['name']) {
-    return await this.cityModel.delete({ name });
+  public async updateOne(id: string, createCityDto: CreateCityDto) {
+    try {
+      await this.cityModel.update({ id }, { ...createCityDto });
+    } catch (error) {
+      console.log('CityService updateOne: ', error);
+    }
+  }
+
+  public async deleteOne(id: string) {
+    return await this.cityModel.delete({ id });
   }
 }
