@@ -24,6 +24,10 @@
     "typeorm:migration:generate": "npm run typeorm -- migration:generate -n",
     "typeorm:migration:run": "npm run typeorm -- migration:run"
   },
+  "engines": {
+    "node": "14.x",
+    "npm": "6.x"
+  },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@nestjs/common": "^7.0.0",
