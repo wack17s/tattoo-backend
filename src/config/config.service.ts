@@ -50,7 +50,7 @@ class ConfigService {
         migrationsDir: 'src/migration',
       },
 
-      ssl: { rejectUnauthorized: false },
+      ssl: this.isProduction() ? { rejectUnauthorized: false } : false,
     };
   }
 }
