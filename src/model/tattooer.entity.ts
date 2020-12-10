@@ -9,7 +9,13 @@ export class Tattooer extends BaseEntity {
   public instagram: string;
 
   @Column({ type: 'boolean', default: false })
-  public approved: boolean;
+  public readyToShow: boolean;
+
+  @Column({ type: 'boolean', default: false })
+  public needReview: boolean;
+
+  @Column({ type: 'boolean', default: false })
+  public needUpdate: boolean;
 
   @Column({ type: 'jsonb', default: [] })
   public posts: { id: string; uri: string; }[];
@@ -17,7 +23,7 @@ export class Tattooer extends BaseEntity {
   @Column({ type: 'varchar', nullable: true })
   public city_id?: string;
 
-  @Column({ type: 'varchar', array: true, nullable: true })
+  @Column('varchar', { array: true, nullable: true })
   public style_ids?: string[];
 
   @Column({ type: 'varchar', nullable: true })

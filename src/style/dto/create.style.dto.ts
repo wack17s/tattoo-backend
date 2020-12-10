@@ -1,4 +1,4 @@
-import { IsEnum, IsString, IsDefined } from 'class-validator';
+import { IsEnum, IsString, IsDefined, IsOptional } from 'class-validator';
 
 import { StyleName } from './../style.types';
 
@@ -11,6 +11,11 @@ export class CreateStyleDto {
   @IsString()
   public en: string;
 
-  // ru: string;
-  // ua: string;
+  @IsOptional()
+  @IsString()
+  public ru?: string;
+
+  @IsOptional()
+  @IsString()
+  public ua?: string;
 }

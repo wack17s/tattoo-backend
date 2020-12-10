@@ -11,9 +11,7 @@ const SALT_ROUNDS = 10;
 
 @Injectable()
 export class UserService {
-  constructor(@InjectRepository(User) private readonly userModel: Repository<User>) {
-    // this.createOne({ username: 'adminPetuh', password: 'pizda1299!' });
-  }
+  constructor(@InjectRepository(User) private readonly userModel: Repository<User>) {}
 
   public async getOneByUsername(username: string) {
     return await this.userModel.findOne({ username });

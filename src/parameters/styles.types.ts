@@ -19,6 +19,6 @@ export enum StyleId {
 export interface IStyle {
   id: StyleId;
   en: string;
-  // ru: string;
-  // ua: string;
+  ru?: string;
+  ua?: string;
 }

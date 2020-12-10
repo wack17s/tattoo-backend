@@ -4,7 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { configService } from './config/config.service';
 
 import { AuthModule } from './auth/auth.module';
-// import { AdminModule } from './admin/admin.module';
 import { CityModule } from './city/city.module';
 import { TattooerModule } from './tattooer/tattooer.module';
 import { StyleModule } from './style/style.module';

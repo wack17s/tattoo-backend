@@ -12,12 +12,12 @@ export class City extends BaseEntity {
   })
   public name: CityName;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   public en: string;
 
   @Column({ type: 'varchar' })
   public ru: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   public ua: string;
 }

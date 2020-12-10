@@ -1,4 +1,4 @@
-import { IsEnum, IsString, IsDefined } from 'class-validator';
+import { IsEnum, IsString, IsDefined, IsOptional } from 'class-validator';
 
 import { CityName } from './../city.types';
 
@@ -7,15 +7,15 @@ export class CreateCityDto {
   @IsEnum(CityName)
   public name: CityName;
 
-  @IsDefined()
+  @IsOptional()
   @IsString()
-  public en: string;
+  public en?: string;
 
   @IsDefined()
   @IsString()
   public ru: string;
 
-  @IsDefined()
+  @IsOptional()
   @IsString()
-  public ua: string;
+  public ua?: string;
 }

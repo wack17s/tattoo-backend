@@ -13,6 +13,12 @@ export class Style extends BaseEntity {
   })
   public name: StyleName;
 
-  @Column({ type: 'varchar'})
+  @Column({ type: 'varchar' })
   public en: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  public ru: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  public ua: string;
 }

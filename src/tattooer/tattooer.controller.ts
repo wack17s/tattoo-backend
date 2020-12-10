@@ -1,5 +1,6 @@
 import { Header, Controller, Get, Post, Body, Put, Delete, Param, Res, Query, UseGuards } from '@nestjs/common';
 import { isEmpty } from 'lodash';
+import { In } from 'typeorm';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
@@ -13,8 +14,19 @@ export class TattooerController {
   @Get()
   @Header('Access-Control-Expose-Headers', 'X-Total-Count')
   @UseGuards(JwtAuthGuard)
-  public async getList(@Query() params: { _end?: string, _order?: 'ASC' | 'DESC', _sort?: string, _start?: string }, @Res() res: any) {
-    const { _end, _order, _sort, _start } = params;
+  public async getList(@Query() params: { _end?: string, _order?: 'ASC' | 'DESC', _sort?: string, _start?: string, id?: string }, @Res() res: any) {
+    const { _end, _order, _sort, _start, id } = params;
+
+    if (id) {
+      const tattooer = await this.tattooerService.getList({
+        where: { id: In(typeof id === 'string' ? [id] : id) },
+        order: { name: "ASC" },
+    });
+
+      res.set('X-Total-Count', 1);
+
+      return res.send(JSON.stringify([tattooer]));
+    }
 
     const allTattooers = await this.tattooerService.getList();
 
@@ -39,9 +51,9 @@ export class TattooerController {
     return (await this.tattooerService.getOne(id));
   }
 
-  @Post(':id')
+  @Post()
   @UseGuards(JwtAuthGuard)
-  public async createOne(@Param('id') id: string, @Body() createTattooerDto: CreateTattooerDto) {
+  public async createOne(@Body() createTattooerDto: CreateTattooerDto) {
     const tattooer = await this.tattooerService.createOne({ ...createTattooerDto });
 
     return JSON.stringify(tattooer);
@@ -60,17 +72,9 @@ export class TattooerController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   public async deleteOne(@Param('id') id: string) {
-    const tattooer = await this.tattooerService.deleteOne(id);
+    console.log('delete, ', id)
+    const deleteResult = await this.tattooerService.deleteOne(id);
 
-    return JSON.stringify(tattooer);
+    return JSON.stringify(deleteResult);
   }
 }
-
-// getList	GET http://my.api.url/posts?_sort=title&_order=ASC&_start=0&_end=24&title=bar
-// getOne	GET http://my.api.url/posts/123
-// getMany	GET http://my.api.url/posts/123, GET http://my.api.url/posts/456, GET http://my.api.url/posts/789
-// getManyReference	GET http://my.api.url/posts?author_id=345
-// create	POST http://my.api.url/posts/123
-// update	PUT http://my.api.url/posts/123
-// updateMany	PUT http://my.api.url/posts/123, PUT http://my.api.url/posts/456, PUT http://my.api.url/posts/789
-// delete	DELETE http://my.api.url/posts/123

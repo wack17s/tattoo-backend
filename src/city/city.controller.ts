@@ -1,4 +1,6 @@
 import { Controller, Get, Post, Body, Put, Delete, Param, Header, Query, Res, UseGuards } from '@nestjs/common';
+import { isEmpty } from 'lodash';
+import { In } from 'typeorm';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
@@ -12,14 +14,35 @@ export class CityController {
   @Get()
   @Header('Access-Control-Expose-Headers', 'X-Total-Count')
   @UseGuards(JwtAuthGuard)
-  public async getList(@Query() params: { _end?: string, _order?: 'ASC' | 'DESC', _sort?: string, _start?: string }, @Res() res: any) {
-    // const { _end, _order, _sort, _start } = params;
+  public async getList(@Query() params: { _end?: string, _order?: 'ASC' | 'DESC', _sort?: string, _start?: string, id?: string | string[] }, @Res() res: any) {
+    const { _end, _order, _sort, _start, id } = params;
 
-    const allStyles = await this.cityService.getList();
+    if (id) {
+      const cities = await this.cityService.getList({
+        where: { id: In(typeof id === 'string' ? [id] : id) },
+        order: { name: "ASC" },
+    });
 
-    res.set('X-Total-Count', allStyles.length);
+      res.set('X-Total-Count', cities.length);
 
-    return res.send(JSON.stringify(allStyles));
+      return res.send(JSON.stringify(cities));
+    }
+
+    const allCities = await this.cityService.getList();
+
+    res.set('X-Total-Count', allCities.length);
+
+    if (!params || isEmpty(params)) {
+      return res.send(JSON.stringify(allCities));
+    }
+
+    const cities = await this.cityService.getList({
+      order: _sort && _order ? { [_sort]: _order } : undefined,
+      skip: _start ? Number(_start) : undefined,
+      take: _end && _start ? Number(_end) - Number(_start) : undefined
+    });
+
+    return res.send(JSON.stringify(cities));
   }
 
   @Get(':id')
@@ -52,12 +75,3 @@ export class CityController {
     return JSON.stringify(city);
   }
 }
-
-// getList	GET http://my.api.url/posts?_sort=title&_order=ASC&_start=0&_end=24&title=bar
-// getOne	GET http://my.api.url/posts/123
-// getMany	GET http://my.api.url/posts/123, GET http://my.api.url/posts/456, GET http://my.api.url/posts/789
-// getManyReference	GET http://my.api.url/posts?author_id=345
-// create	POST http://my.api.url/posts/123
-// update	PUT http://my.api.url/posts/123
-// updateMany	PUT http://my.api.url/posts/123, PUT http://my.api.url/posts/456, PUT http://my.api.url/posts/789
-// delete	DELETE http://my.api.url/posts/123
