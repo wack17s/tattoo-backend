@@ -6,7 +6,7 @@ export class InstagramService {
 
   public getPost = async (postId: string): Promise<{ thumbnail_url: string; } | null> => {
     try {
-      const response = await this.httpService.get<{ thumbnail_url: string; error?: string; }>(`https://graph.facebook.com/v8.0/instagram_oembed?url=https://www.instagram.com/p/${postId}/&access_token=${process.env['INSTAGRAM_ACCESS_TOKEN']}`).toPromise();
+      const response = await this.httpService.get<{ thumbnail_url: string; error?: string; }>(`https://graph.facebook.com/v8.0/instagram_oembed?url=https://www.instagram.com/p/${postId}/&access_token=${process.env.INSTAGRAM_ACCESS_TOKEN}`).toPromise();
 
       console.log('instagram post', response.data)
 

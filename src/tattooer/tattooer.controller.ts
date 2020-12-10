@@ -1,5 +1,7 @@
-import { Header, Controller, Get, Post, Body, Put, Delete, Param, Res, Query } from '@nestjs/common';
+import { Header, Controller, Get, Post, Body, Put, Delete, Param, Res, Query, UseGuards } from '@nestjs/common';
 import { isEmpty } from 'lodash';
+
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 import { CreateTattooerDto } from './dto/tattooer.create.dto';
 import { TattooerService } from './tattooer.service';
@@ -10,6 +12,7 @@ export class TattooerController {
 
   @Get()
   @Header('Access-Control-Expose-Headers', 'X-Total-Count')
+  @UseGuards(JwtAuthGuard)
   public async getList(@Query() params: { _end?: string, _order?: 'ASC' | 'DESC', _sort?: string, _start?: string }, @Res() res: any) {
     const { _end, _order, _sort, _start } = params;
 
@@ -31,11 +34,13 @@ export class TattooerController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   public async findOne(@Param('id') id: string) {
     return (await this.tattooerService.getOne(id));
   }
 
   @Post(':id')
+  @UseGuards(JwtAuthGuard)
   public async createOne(@Param('id') id: string, @Body() createTattooerDto: CreateTattooerDto) {
     const tattooer = await this.tattooerService.createOne({ ...createTattooerDto });
 
@@ -43,6 +48,7 @@ export class TattooerController {
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthGuard)
   public async updateOne(@Param('id') id: string, @Body() createTattooerDto: CreateTattooerDto) {
     const tattooer = await this.tattooerService.updateOne(id, { ...createTattooerDto });
 
@@ -52,6 +58,7 @@ export class TattooerController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   public async deleteOne(@Param('id') id: string) {
     const tattooer = await this.tattooerService.deleteOne(id);
 

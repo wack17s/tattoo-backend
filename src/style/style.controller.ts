@@ -1,4 +1,6 @@
-import { Controller, Get, Post, Body, Put, Delete, Param, Header, Query, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Delete, Param, Header, Query, Res, UseGuards } from '@nestjs/common';
+
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 import { CreateStyleDto } from './dto/create.style.dto';
 import { StyleService } from './style.service';
@@ -9,6 +11,7 @@ export class StyleController {
 
   @Get()
   @Header('Access-Control-Expose-Headers', 'X-Total-Count')
+  @UseGuards(JwtAuthGuard)
   public async getList(@Query() params: { _end?: string, _order?: 'ASC' | 'DESC', _sort?: string, _start?: string }, @Res() res: any) {
     // const { _end, _order, _sort, _start } = params;
 
@@ -20,11 +23,13 @@ export class StyleController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   public async findOne(@Param('id') id: string) {
     return (await this.styleService.getOne(id));
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   public async createOne(@Body() createStyleDto: CreateStyleDto) {
     const style = await this.styleService.createOne(createStyleDto);
 
@@ -32,6 +37,7 @@ export class StyleController {
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthGuard)
   public async updateOne(@Param('id') id: string, @Body() createStyleDto: CreateStyleDto) {
     const style = await this.styleService.updateOne(id, { ...createStyleDto });
 
@@ -39,6 +45,7 @@ export class StyleController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   public async deleteOne(@Param('id') id: string) {
     const style = await this.styleService.deleteOne(id);
 

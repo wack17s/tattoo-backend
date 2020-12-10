@@ -1,5 +1,6 @@
-import { StyleName } from './../style/style.types';
 import { Entity, Column, PrimaryColumn } from 'typeorm';
+
+import { StyleName } from '../style/style.types';
 
 import { BaseEntity } from './base.entity';
 
