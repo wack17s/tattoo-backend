@@ -6,6 +6,8 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const whitelist = ['https://www.instagram.com', 'https://tattoo-admin.herokuapp.com/'];
+
   app.use(cors({
     allowedHeaders: [
       'Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization', 'Accept-Encoding', 'Connection',
@@ -13,9 +15,12 @@ async function bootstrap() {
     ],
     credentials: true,
     methods: [ 'GET', 'PUT', 'POST', 'DELETE', 'OPTIONS' ],
-    origin: (origin, callback) => {
-      callback(null, true);
-        return;
+    origin: function (origin, callback) {
+      if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true)
+      } else {
+        callback(new Error('Not allowed by CORS'))
+      }
     }
   }));
 
