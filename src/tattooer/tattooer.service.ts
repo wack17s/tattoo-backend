@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { Tattooer } from '../model/tattooer.entity';
 import { InstagramService } from '../instagram/instagram.service';
@@ -14,7 +14,7 @@ export class TattooerService {
     private instagramService: InstagramService
   ) {}
 
-  public async getList(params?: FindManyOptions) {
+  public async getList(params?: any) {
     return (await this.tattooerModel.find(params));
   }
 

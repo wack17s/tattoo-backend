@@ -7,8 +7,8 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateTattooerDto } from './dto/tattooer.create.dto';
 import { TattooerService } from './tattooer.service';
 
-@Controller('tattooer')
-export class TattooerController {
+@Controller('tattooer-not-ready')
+export class TattooerNotReadyController {
   constructor(private tattooerService: TattooerService) { }
 
   @Get()
@@ -28,7 +28,9 @@ export class TattooerController {
       return res.send(JSON.stringify([tattooer]));
     }
 
-    const allTattooers = await this.tattooerService.getList();
+    const allTattooers = await this.tattooerService.getList({ where: { readyToShow: false } });
+
+    console.log('allTattooers', allTattooers)
 
     res.set('X-Total-Count', allTattooers.length);
 
@@ -37,6 +39,7 @@ export class TattooerController {
     }
 
     const tattooers = await this.tattooerService.getList({
+      where: { readyToShow: false },
       order: _sort && _order ? { [_sort]: _order } : undefined,
       skip: _start ? Number(_start) : undefined,
       take: _end && _start ? Number(_end) - Number(_start) : undefined
