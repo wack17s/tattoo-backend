@@ -31,6 +31,8 @@ export class TattooerService {
 
     let newPosts = []
 
+    const existingTattooer = await this.tattooerModel.findOne({ instagram: createTattooer.instagram });
+
     if (postIds && postIds.length) {
       const posts = await Promise.all(postIds.map(async postId => {
         const instagramPost = await this.instagramService.getPost(postId);
@@ -46,6 +48,13 @@ export class TattooerService {
       }));
 
       newPosts = posts.filter(item => !!item);
+    }
+
+    if (existingTattooer) {
+      return (await this.updateOne(existingTattooer.id, {
+        ...createTattooer,
+        posts: [...newPosts, ...(existingTattooer.posts || [])],
+      }));
     }
 
     const createdTattooer = this.tattooerModel.create({
