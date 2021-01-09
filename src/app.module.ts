@@ -4,6 +4,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 
 import { configService } from './config/config.service';
 
+import { VercelModule } from './vercel/vercel.module';
 import { TasksModule } from './tasks/tasks.module';
 import { AuthModule } from './auth/auth.module';
 import { CityModule } from './city/city.module';
@@ -26,7 +27,8 @@ import { Tattooer } from './model/tattooer.entity';
     CityModule,
     StyleModule,
     AuthModule,
-    TasksModule
+    TasksModule,
+    VercelModule
   ],
   controllers: [],
   providers: [],
