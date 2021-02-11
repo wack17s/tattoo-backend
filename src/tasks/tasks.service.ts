@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
+// import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -19,7 +19,7 @@ export class TasksService {
     // this.updateTattooersPosts();
   }
 
-  @Cron(CronExpression.EVERY_WEEK)
+  // @Cron(CronExpression.EVERY_WEEK)
   public async updateTattooersPosts() {
     const tattooers = await this.tattooerModel.find();
 

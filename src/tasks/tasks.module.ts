@@ -6,10 +6,12 @@ import { Tattooer } from '../model/tattooer.entity';
 import { InstagramModule } from '../instagram/instagram.module';
 
 import { TasksService } from './tasks.service';
+import { TasksController } from './tasks.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Tattooer]), InstagramModule, VercelModule],
   providers: [TasksService],
+  controllers: [TasksController],
   exports: []
 })
 export class TasksModule {}
