@@ -8,24 +8,7 @@ async function bootstrap() {
 
   // const whitelist = ['https://tattoo-admin.herokuapp.com', 'https://mytattoo.com.ua'];
 
-  app.use(cors({
-    allowedHeaders: [
-      'Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization', 'Accept-Encoding', 'Connection',
-      'X-Parse-Session-Token', 'X-Parse-Application-Id',
-    ],
-    credentials: true,
-    optionsSuccessStatus: 200,
-    methods: [ 'GET', 'PUT', 'POST', 'DELETE', 'OPTIONS' ],
-    origin: function (origin, callback) {
-      callback(null, true);
-
-      // if (whitelist.indexOf(origin) !== -1) {
-      //   callback(null, true)
-      // } else {
-      //   callback(new Error('Not allowed by CORS'))
-      // }
-    }
-  }));
+  app.use(cors());
 
   await app.listen(process.env.PORT || 3001);
 }
