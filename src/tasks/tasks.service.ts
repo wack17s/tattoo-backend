@@ -16,7 +16,7 @@ export class TasksService {
     private instagramService: InstagramService,
     private vercelService: VercelService,
   ) {
-    // this.updateTattooersPosts();
+    this.updateTattooersPosts();
   }
 
   // @Cron(CronExpression.EVERY_WEEK)
